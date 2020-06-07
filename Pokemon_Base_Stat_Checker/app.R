@@ -3,6 +3,18 @@ library(tidyverse)
 library(jsonlite)
 library(shinythemes)
 library(plotly)
+library(pool)
+readRenviron(".Renviron")
+
+host <- "35.225.203.68"
+
+con <- dbPool(
+    RPostgres::Postgres(),
+    dbname = "demo",
+    user = "postgres", password = Sys.getenv("DATABASEPW"), host = host
+)
+
+onStop(function() poolClose(con))
 
 #To get the exist generations
 url_generation = str_glue("https://pokeapi.co/api/v2/{endpoint}/",
